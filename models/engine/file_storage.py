@@ -33,12 +33,22 @@ class FileStorage:
         Deserializes the JSON file to __objects
         (only if the JSON file (__file_path)) exists; otherwise, do nothing.
         """
+        from models.amenity import Amenity
         from models.base_model import BaseModel
+        from models.city import City
+        from models.place import Place
+        from models.review import Review
+        from models.state import State
         from models.user import User
 
         classes = {
+            "Amenity": Amenity,
             "BaseModel": BaseModel,
-            "User": User
+            "City": City,
+            "Place": Place,
+            "Review": Review,
+            "State": State,
+            "User": User,
         }
         if not os.path.exists(FileStorage.__file_path):
             return
