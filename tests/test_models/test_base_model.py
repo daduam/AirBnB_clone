@@ -2,14 +2,27 @@
 """Unit tests for base model module"""
 
 import datetime
+import os
 import unittest
 import uuid
 
+from models import storage
 from models.base_model import BaseModel
+from models.engine.file_storage import FileStorage
 
 
 class TestBaseModel(unittest.TestCase):
     """Defines unit tests for BaseModel"""
+
+    def setUp(self):
+        """set up tests"""
+        FileStorage._FileStorage__file_path = "test.json"
+        FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        """tear down tests"""
+        if os.path.exists(FileStorage._FileStorage__file_path):
+            os.remove(FileStorage._FileStorage__file_path)
 
     def test_public_instance_attributes(self):
         """Test public instance attributes"""
@@ -36,6 +49,15 @@ class TestBaseModel(unittest.TestCase):
         bm.save()
         new_date = bm.updated_at
         self.assertGreater(new_date, old_date)
+
+        storage.reload()
+        key = "{}.{}".format(bm.__class__.__name__, bm.id)
+        self.assertIn(key, storage.all())
+        self.assertDictEqual(bm.to_dict(), storage.all()[key].to_dict())
+
+        bm2 = BaseModel()
+        key = "{}.{}".format(bm2.__class__.__name__, bm2.id)
+        self.assertIn(key, storage.all())
 
     def test_to_dict(self):
         """Test to_dict public instance method"""
