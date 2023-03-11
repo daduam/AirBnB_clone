@@ -51,3 +51,15 @@ class TestBaseModel(unittest.TestCase):
                          datetime.datetime.fromisoformat(bmdict["created_at"]))
         self.assertEqual(bm.updated_at,
                          datetime.datetime.fromisoformat(bmdict["updated_at"]))
+
+    def test_create_base_model_from_dict(self):
+        """Test create BaseModel from dict with kwargs"""
+        BaseModel(**{})
+        BaseModel(None)
+
+        bm = BaseModel()
+        bm_kwargs = BaseModel(**bm.to_dict())
+        self.assertEqual(bm.id, bm_kwargs.id)
+        self.assertEqual(bm.created_at, bm_kwargs.created_at)
+        self.assertEqual(bm.updated_at, bm_kwargs.updated_at)
+        self.assertIsNot(bm, bm_kwargs)
