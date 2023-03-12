@@ -153,6 +153,8 @@ class HBNBCommand(cmd.Cmd):
         commands = {
             "all": self.do_all,
             "count": self._count_instances,
+            "show": self.do_show,
+            "destroy": self.do_destroy,
         }
         if line[-1] != ")":
             return cmd.Cmd.default(self, line)
@@ -167,6 +169,12 @@ class HBNBCommand(cmd.Cmd):
             return cmd.Cmd.default(self, line)
         if command in ("all", "count"):
             commands[command](class_name)
+            return
+        elif command in ("show", "destroy"):
+            instance_id = line[idx2+1:-1].strip()
+            commands[command]("{} {}".format(class_name, instance_id))
+            return
+        return cmd.Cmd.default(self, line)
 
 
 if __name__ == "__main__":
