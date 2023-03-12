@@ -136,6 +136,14 @@ class HBNBCommand(cmd.Cmd):
             return False
         return True
 
+    def _count_instances(self, class_name):
+        """Count instances of a class"""
+        count = 0
+        for key in storage.all().keys():
+            if key.startswith(class_name):
+                count += 1
+        print(count)
+
     def emptyline(self):
         """Do not when an empty line is entered"""
         pass
@@ -143,7 +151,8 @@ class HBNBCommand(cmd.Cmd):
     def default(self, line):
         """Override cmd.Cmd default method"""
         commands = {
-            "all": self.do_all
+            "all": self.do_all,
+            "count": self._count_instances,
         }
         if line[-1] != ")":
             return cmd.Cmd.default(self, line)
@@ -156,7 +165,7 @@ class HBNBCommand(cmd.Cmd):
         command = line[idx+1:idx2]
         if idx2 == -1 or command not in commands:
             return cmd.Cmd.default(self, line)
-        if command == "all":
+        if command in ("all", "count"):
             commands[command](class_name)
 
 
