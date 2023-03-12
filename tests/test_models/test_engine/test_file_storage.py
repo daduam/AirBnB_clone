@@ -26,7 +26,7 @@ class TestFileStorage(unittest.TestCase):
         """Test all public instance method"""
         fstorage = FileStorage()
         result = fstorage.all()
-        self.assertTrue(type(result) is dict)
+        self.assertTrue(type(result) == dict)
         self.assertDictEqual(result, FileStorage._FileStorage__objects)
 
     def test_new(self):
@@ -37,8 +37,9 @@ class TestFileStorage(unittest.TestCase):
         all_objs = fstorage.all()
 
         key = "{}.{}".format(bm.__class__.__name__, bm.id)
-        self.assertIn(key, all_objs)
-        self.assertIs(bm, all_objs[key])
+        self.assertTrue(key in all_objs)
+        self.assertTrue(bm is all_objs[key])
+        self.assertTrue(bm == all_objs[key])
 
     def test_save(self):
         """Test save public instance method"""
@@ -69,7 +70,8 @@ class TestFileStorage(unittest.TestCase):
         objs_after = fstorage.all()
 
         self.assertDictEqual(objs_before, objs_after)
-        self.assertIs(objs_before, objs_after)
+        self.assertTrue(objs_before is objs_after)
+        self.assertTrue(objs_before == objs_after)
 
     def test_storage(self):
         """Test global storage object"""
