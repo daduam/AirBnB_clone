@@ -179,14 +179,16 @@ class HBNBCommand(cmd.Cmd):
             if idx3 == -1:
                 return cmd.Cmd.default(self, line)
             instance_id = arg[:idx3].strip()
-            arg = arg[idx3+1:]
-            idx4 = arg.find(",")
-            attr_name = arg[:idx4].strip()
-            attr_value = arg[idx4+1:].strip()
-            return commands[command]("{} {} {} {}".format(class_name,
-                                                          instance_id,
-                                                          attr_name,
-                                                          attr_value))
+            arg = arg[idx3+1:].strip()
+            if arg[0] == "{" and arg[-1] == "}":
+                arg = arg[1:-1]
+            tokens = [s.strip().strip(":,") for s in shlex.split(arg)]
+            for i in range(0, len(tokens), 2):
+                commands[command]("{} {} {} '{}'".format(class_name,
+                                                         instance_id,
+                                                         tokens[i],
+                                                         tokens[i+1]))
+            return
         return cmd.Cmd.default(self, line)
 
 
