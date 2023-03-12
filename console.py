@@ -138,7 +138,26 @@ class HBNBCommand(cmd.Cmd):
 
     def emptyline(self):
         """Do not when an empty line is entered"""
-        return
+        pass
+
+    def default(self, line):
+        """Override cmd.Cmd default method"""
+        commands = {
+            "all": self.do_all
+        }
+        if line[-1] != ")":
+            return cmd.Cmd.default(self, line)
+        idx = line.find(".")
+        class_name = line[:idx]
+        cls = self.classes.get(class_name)
+        if idx == -1 or cls is None:
+            return cmd.Cmd.default(self, line)
+        idx2 = line.find("(")
+        command = line[idx+1:idx2]
+        if idx2 == -1 or command not in commands:
+            return cmd.Cmd.default(self, line)
+        if command == "all":
+            commands[command](class_name)
 
 
 if __name__ == "__main__":
