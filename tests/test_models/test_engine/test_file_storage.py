@@ -26,6 +26,7 @@ class TestFileStorage(unittest.TestCase):
         """Test all public instance method"""
         fstorage = FileStorage()
         result = fstorage.all()
+        self.assertIsInstance(result, dict)
         self.assertDictEqual(result, FileStorage._FileStorage__objects)
 
     def test_new(self):
