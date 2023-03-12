@@ -7,6 +7,7 @@ import unittest
 from models import storage
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
+from models.user import User
 
 
 class TestFileStorage(unittest.TestCase):
@@ -60,7 +61,9 @@ class TestFileStorage(unittest.TestCase):
         """Test reload public instace method"""
         fstorage = FileStorage()
         bm = BaseModel()
+        user = User()
         fstorage.new(bm)
+        fstorage.new(user)
 
         fstorage.save()
         objs_before = fstorage.all()
